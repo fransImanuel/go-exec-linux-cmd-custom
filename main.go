@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
 )
@@ -65,13 +64,25 @@ func main() {
 	fmt.Println("2. Zip Sucess : ", string(stdout))
 
 	//scp -P 43210 2023-10.zip sysadmin@10.254.212.4:/var/www/html/public/photo/survey/
-	targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
 	// cmd = exec.Command("scp", "-P", "43210", zipFolder, targetMachine)
+	// cmd.Stdin = bytes.NewBufferString("R@ngerHi7au*\n")
+	// stdout, err = cmd.Output()
+	// if err != nil {
+	// 	fmt.Println("3. ", err)
+	// }
+
+	targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
 	cmd = exec.Command("scp", "-P", "43210", zipFolder, targetMachine)
-	cmd.Stdin = bytes.NewBufferString("R@ngerHi7au*\n")
-	stdout, err = cmd.Output()
+	cmdWriter, err := cmd.StdinPipe()
+
+	err = cmd.Start()
 	if err != nil {
-		fmt.Println("2. ", err)
+		fmt.Println("3-1. ", err)
+	}
+	cmdWriter.Write([]byte("R@ngerHi7au*"))
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Println("3-2. ", err)
 	}
 	fmt.Println("3. SCP success : ", string(stdout))
 }
