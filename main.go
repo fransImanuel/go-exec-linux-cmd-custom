@@ -79,10 +79,14 @@ func main() {
 	if err != nil {
 		fmt.Println("3-1. ", err)
 	}
-	cmdWriter.Write([]byte("R@ngerHi7au*"))
-	err = cmd.Wait()
+	n, err := cmdWriter.Write([]byte("R@ngerHi7au*"))
 	if err != nil {
 		fmt.Println("3-2. ", err)
+	}
+	fmt.Println("3-3. ", n)
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Println("3-4. ", err)
 	}
 	fmt.Println("3. SCP success : ", string(stdout))
 }
