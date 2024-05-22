@@ -72,21 +72,12 @@ func main() {
 	// }
 
 	targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
-	cmd = exec.Command("scp", "-P", "43210", zipFolder, targetMachine)
-	cmdWriter, err := cmd.StdinPipe()
+	password := "R@ngerHi7au*"
 
-	err = cmd.Start()
+	cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
+	stdout, err = cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("3-1. ", err)
-	}
-	n, err := cmdWriter.Write([]byte("R@ngerHi7au*"))
-	if err != nil {
-		fmt.Println("3-2. ", err)
-	}
-	fmt.Println("3-3. ", n)
-	err = cmd.Wait()
-	if err != nil {
-		fmt.Println("3-4. ", err)
+		fmt.Println("3. ", err)
 	}
 	fmt.Println("3. SCP success : ", string(stdout))
 }
