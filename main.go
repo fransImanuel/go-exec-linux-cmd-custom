@@ -2,84 +2,94 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"os/exec"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/robfig/cron/v3"
 )
 
 func main() {
-	cmd := exec.Command("mkdir", "cnth_zip")
-	// cmd.Stdin = bytes.NewBufferString("R@ngerHit@m007\n")
-	stdout, err := cmd.Output()
-	if err != nil {
-		fmt.Println("1. ", err)
-	}
-	fmt.Println("1. Create Dir Success : ", string(stdout))
 
-	// // 1. get list directory to find the oldest with YYYY-MM format
-	// entries, err := os.ReadDir("./")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// if len(entries) == 0 {
-	// 	panic("No directory detected")
-	// }
+	c := cron.New()
+	c.AddFunc("0 0 1 * *", func() {
 
-	// var oldestFolder string
-	// var oldestTime time.Time
-	// for _, e := range entries {
-	// 	strs := strings.Split(e.Name(), "-")
-	// 	if len(strs) != 2 {
-	// 		continue
-	// 	}
-	// 	year, err := strconv.Atoi(strs[0])
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		panic(1)
-	// 	}
-	// 	month, err := strconv.Atoi(strs[1])
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		panic(1)
-	// 	}
+		// 1. get list directory to find the oldest with YYYY-MM format
+		entries, err := os.ReadDir("./")
+		if err != nil {
+			log.Fatal(err)
+		}
+		if len(entries) == 0 {
+			panic("No directory detected")
+		}
 
-	// 	currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
-	// 	if oldestTime.IsZero() || currentTime.Before(oldestTime) {
-	// 		oldestTime = currentTime
-	// 		oldestFolder = fmt.Sprintf("%d-%s", year, strs[1])
-	// 	}
+		var oldestFolder string
+		var oldestTime time.Time
+		for _, e := range entries {
+			strs := strings.Split(e.Name(), "-")
+			if len(strs) != 2 {
+				continue
+			}
+			year, err := strconv.Atoi(strs[0])
+			if err != nil {
+				fmt.Println("1-1. Error : ", err)
+				// panic(1)
+			}
+			month, err := strconv.Atoi(strs[1])
+			if err != nil {
+				fmt.Println("1-2. Error : ", err)
+				// panic(1)
+			}
 
-	// }
+			currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
+			if oldestTime.IsZero() || currentTime.Before(oldestTime) {
+				oldestTime = currentTime
+				oldestFolder = fmt.Sprintf("%d-%s", year, strs[1])
+			}
 
-	// fmt.Println("1. Successfuly get the oldest folder : ", oldestFolder)
+		}
 
-	// Zip The folder
-	// zipFolder := oldestFolder + ".zip"
-	// cmd = exec.Command("zip", "-r", zipFolder, oldestFolder)
+		fmt.Println("1. Successfuly get the oldest folder : ", oldestFolder)
 
-	zipFolder := "cnth_zip" + ".zip"
-	cmd = exec.Command("zip", "-r", zipFolder, "cnth_zip")
-	stdout, err = cmd.Output()
-	if err != nil {
-		fmt.Println("2. ", err)
-	}
-	fmt.Println("2. Zip Sucess : ", string(stdout))
+		// 2. Zip The folder
+		zipFolder := oldestFolder + ".zip"
+		cmd := exec.Command("zip", "-r", zipFolder, oldestFolder)
+		stdout, err := cmd.Output()
+		if err != nil {
+			fmt.Println("2. ", err)
+		}
+		fmt.Println("2. Zip Sucess : ", string(stdout))
 
-	//scp -P 43210 2023-10.zip sysadmin@10.254.212.4:/var/www/html/public/photo/survey/
-	// cmd = exec.Command("scp", "-P", "43210", zipFolder, targetMachine)
-	// cmd.Stdin = bytes.NewBufferString("R@ngerHi7au*\n")
-	// stdout, err = cmd.Output()
-	// if err != nil {
-	// 	fmt.Println("3. ", err)
-	// }
+		// 3. Send File using scp
+		targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
+		password := "R@ngerHi7au*"
+		cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
+		stdout, err = cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println("3. ", err)
+		}
+		fmt.Println("3. SCP success : ", string(stdout))
 
-	targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
-	password := "R@ngerHi7au*"
+		// 4. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
+		// cmd = exec.Command("rm", zipFolder)
+		// stdout, err = cmd.Output()
+		// if err != nil {
+		// 	fmt.Println("4-1. ", err)
+		// }
+		// cmd = exec.Command("rm", "-rf", oldestFolder)
+		// stdout, err = cmd.Output()
+		// if err != nil {
+		// 	fmt.Println("4-2. ", err)
+		// }
+		// fmt.Println("4. Remove File ", oldestFolder, " Success")
 
-	cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
-	stdout, err = cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("3. ", err)
-	}
-	fmt.Println("3. SCP success : ", string(stdout))
+	})
+
+	select {}
+
 }
 
 // sudo zip -r 2023-10.zip 2023-10
