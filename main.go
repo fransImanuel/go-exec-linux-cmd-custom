@@ -15,80 +15,80 @@ import (
 func main() {
 
 	c := cron.New()
-	c.AddFunc("0 0 1 * *", func() {
+	// c.AddFunc("0 0 1 * *", func() {
 
-		// 1. get list directory to find the oldest with YYYY-MM format
-		entries, err := os.ReadDir("./")
+	// 1. get list directory to find the oldest with YYYY-MM format
+	entries, err := os.ReadDir("./")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if len(entries) == 0 {
+		panic("No directory detected")
+	}
+
+	var oldestFolder string
+	var oldestTime time.Time
+	for _, e := range entries {
+		strs := strings.Split(e.Name(), "-")
+		if len(strs) != 2 {
+			continue
+		}
+		year, err := strconv.Atoi(strs[0])
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println("1-1. Error : ", err)
+			// panic(1)
 		}
-		if len(entries) == 0 {
-			panic("No directory detected")
-		}
-
-		var oldestFolder string
-		var oldestTime time.Time
-		for _, e := range entries {
-			strs := strings.Split(e.Name(), "-")
-			if len(strs) != 2 {
-				continue
-			}
-			year, err := strconv.Atoi(strs[0])
-			if err != nil {
-				fmt.Println("1-1. Error : ", err)
-				// panic(1)
-			}
-			month, err := strconv.Atoi(strs[1])
-			if err != nil {
-				fmt.Println("1-2. Error : ", err)
-				// panic(1)
-			}
-
-			currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
-			if oldestTime.IsZero() || currentTime.Before(oldestTime) {
-				oldestTime = currentTime
-				oldestFolder = fmt.Sprintf("%d-%s", year, strs[1])
-			}
-
-		}
-
-		fmt.Println("1. Successfuly get the oldest folder : ", oldestFolder)
-
-		// 2. Zip The folder
-		zipFolder := oldestFolder + ".zip"
-		cmd := exec.Command("zip", "-r", zipFolder, oldestFolder)
-		stdout, err := cmd.Output()
+		month, err := strconv.Atoi(strs[1])
 		if err != nil {
-			fmt.Println("2. ", err)
+			fmt.Println("1-2. Error : ", err)
+			// panic(1)
 		}
-		fmt.Println("2. Zip Sucess : ", string(stdout))
 
-		// 3. Send File using scp
-		targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
-		password := "R@ngerHi7au*"
-		cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
-		stdout, err = cmd.CombinedOutput()
-		if err != nil {
-			fmt.Println("3. ", err)
+		currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
+		if oldestTime.IsZero() || currentTime.Before(oldestTime) {
+			oldestTime = currentTime
+			oldestFolder = fmt.Sprintf("%d-%s", year, strs[1])
 		}
-		fmt.Println("3. SCP success : ", string(stdout))
 
-		// 4. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
-		// cmd = exec.Command("rm", zipFolder)
-		// stdout, err = cmd.Output()
-		// if err != nil {
-		// 	fmt.Println("4-1. ", err)
-		// }
-		// cmd = exec.Command("rm", "-rf", oldestFolder)
-		// stdout, err = cmd.Output()
-		// if err != nil {
-		// 	fmt.Println("4-2. ", err)
-		// }
-		// fmt.Println("4. Remove File ", oldestFolder, " Success")
+	}
 
-	})
+	fmt.Println("1. Successfuly get the oldest folder : ", oldestFolder)
 
-	c.Start()
+	// 2. Zip The folder
+	zipFolder := oldestFolder + ".zip"
+	cmd := exec.Command("zip", "-r", zipFolder, oldestFolder)
+	stdout, err := cmd.Output()
+	if err != nil {
+		fmt.Println("2. ", err)
+	}
+	fmt.Println("2. Zip Sucess : ", string(stdout))
+
+	// 3. Send File using scp
+	targetMachine := "sysadmin@10.254.212.4:/var/www/html/public/photo/survey/"
+	password := "R@ngerHi7au*"
+	cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
+	stdout, err = cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("3. ", err)
+	}
+	fmt.Println("3. SCP success : ", string(stdout))
+
+	// 4. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
+	// cmd = exec.Command("rm", zipFolder)
+	// stdout, err = cmd.Output()
+	// if err != nil {
+	// 	fmt.Println("4-1. ", err)
+	// }
+	// cmd = exec.Command("rm", "-rf", oldestFolder)
+	// stdout, err = cmd.Output()
+	// if err != nil {
+	// 	fmt.Println("4-2. ", err)
+	// }
+	// fmt.Println("4. Remove File ", oldestFolder, " Success")
+
+	// })
+
+	// c.Start()
 
 	select {}
 
