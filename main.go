@@ -88,6 +88,8 @@ func main() {
 
 	})
 
+	c.Start()
+
 	select {}
 
 }
