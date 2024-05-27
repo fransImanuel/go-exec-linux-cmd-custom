@@ -8,13 +8,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/robfig/cron/v3"
 )
 
 func main() {
 
-	c := cron.New()
+	// c := cron.New()
 	// c.AddFunc("0 0 1 * *", func() {
 
 	// 1. get list directory to find the oldest with YYYY-MM format
