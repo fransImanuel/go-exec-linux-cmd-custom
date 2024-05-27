@@ -72,17 +72,17 @@ func main() {
 	fmt.Println("3. SCP success : ", string(stdout))
 
 	// 4. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
-	// cmd = exec.Command("rm", zipFolder)
-	// stdout, err = cmd.Output()
-	// if err != nil {
-	// 	fmt.Println("4-1. ", err)
-	// }
-	// cmd = exec.Command("rm", "-rf", oldestFolder)
-	// stdout, err = cmd.Output()
-	// if err != nil {
-	// 	fmt.Println("4-2. ", err)
-	// }
-	// fmt.Println("4. Remove File ", oldestFolder, " Success")
+	cmd = exec.Command("rm", zipFolder)
+	stdout, err = cmd.Output()
+	if err != nil {
+		fmt.Println("4-1. ", err)
+	}
+	cmd = exec.Command("rm", "-rf", oldestFolder)
+	stdout, err = cmd.Output()
+	if err != nil {
+		fmt.Println("4-2. ", err)
+	}
+	fmt.Println("4. Remove File ", oldestFolder, " Success")
 
 	// })
 
