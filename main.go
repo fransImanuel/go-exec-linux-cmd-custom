@@ -85,16 +85,16 @@ func main() {
 	}
 	fmt.Println("4. Remove File ", oldestFolder, " Success")
 
-	// 5. SSH into the target machine and unzip the file
+	// 5. SSH into the target machine, unzip the file, and remove the zip file
 	remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
 	remoteUnzipDir := "/var/www/html/public/photo/survey/"
-	sshCommand := fmt.Sprintf("unzip -o %s -d %s", remoteZipFile, remoteUnzipDir)
-	cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", host, sshCommand)
+	sshCommand := fmt.Sprintf("unzip -o %s -d %s && rm %s", remoteZipFile, remoteUnzipDir, remoteZipFile)
+	cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
 	stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("5. ", err)
 	}
-	fmt.Println("5. Unzip on remote success : ", string(stdout))
+	fmt.Println("5. Unzip and remove zip file on remote success : ", string(stdout))
 
 	// })
 
