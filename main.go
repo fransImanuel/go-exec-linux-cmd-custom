@@ -15,8 +15,7 @@ func main() {
 	// c.AddFunc("0 0 1 * *", func() {
 
 	// 1. get list directory to find the oldest with YYYY-MM format
-	fmt.Println("---------------------------Program Started-----------------------------")
-	fmt.Printf("----------------------------%v---------------------------\n", time.Now())
+	fmt.Printf("\n-------------------Program Started at %v------------------\n", time.Now())
 	entries, err := os.ReadDir("./")
 	if err != nil {
 		log.Fatal(err)
@@ -107,14 +106,11 @@ func main() {
 	}
 	fmt.Println("6. List files on remote success : ", string(stdout))
 
+	// 7. get list directory to find the oldest with YYYY-MM format in the 2nd VM
 	// Process the list of files on the remote machine
 	fileList := string(stdout)
-	fmt.Println("6. List of files on remote machine: ", fileList)
-
 	// Process the file list
 	remoteEntries := strings.Split(fileList, "\n")
-
-	// 7. get list directory to find the oldest with YYYY-MM format in the 2nd VM
 	var oldestFolder2ndVM string
 	var oldestTime2ndVM time.Time
 	for _, e := range remoteEntries {
@@ -142,10 +138,18 @@ func main() {
 	}
 	fmt.Println("7. Successfuly get the oldest folder in 2nd VM : ", oldestFolder2ndVM)
 
-	// 8. Remove oldest  File in 2nd VM
+	// 8. Remove oldest folder in 2nd VM
+	// remoteOldestFolder := remoteUnzipDir + oldestFolder2ndVM
+	// sshCommand = fmt.Sprintf("rm -rf %s", remoteOldestFolder)
+	// cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
+	// stdout, err = cmd.CombinedOutput()
+	// if err != nil {
+	// 	fmt.Println("8. ", err)
+	// }
+	// fmt.Println("8. Remove oldest folder in 2nd VM success : ", string(stdout))
+	fmt.Println("8. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder, string(stdout))
 
-	fmt.Println("---------------------------Program Finished-----------------------------")
-	fmt.Printf("----------------------------%v---------------------------\n", time.Now())
+	fmt.Printf("\n------------------Program Finished at %v------------------\n", time.Now())
 	// })
 
 	// c.Start()
