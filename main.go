@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"go-exec-linux-cmd-custom/util/env"
+	"go-exec-linux-cmd-custom/util/mail"
 	"log"
 	"os"
 	"os/exec"
@@ -12,10 +14,13 @@ import (
 
 func main() {
 	// c := cron.New()
-	// c.AddFunc("0 0 1 * *", func() {
+	// // setial bulan jam 2 pagi tanggal 5
+
+	startTime := time.Now()
+	// c.AddFunc("0 2 5 * *", func() {
 
 	// 1. get list directory to find the oldest with YYYY-MM format
-	fmt.Printf("\n-------------------Program Started at %v------------------\n", time.Now())
+	fmt.Printf("\n--------Program Started at %v--------\n", startTime)
 	entries, err := os.ReadDir("./")
 	if err != nil {
 		log.Fatal(err)
@@ -150,7 +155,18 @@ func main() {
 	// fmt.Println("8. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
 	fmt.Println("8. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
 
-	fmt.Printf("\n------------------Program Finished at %v------------------\n", time.Now())
+	finishedTime := time.Now()
+	fmt.Printf("\n--------Program Finished at %v--------\n", finishedTime)
+
+	// // 9. Send Email
+	smtpConfig := env.GetSMTPConfig()
+	smtpClient := mail.InitEmail(smtpConfig)
+	Email := []string{"frans.imanuel@visionet.co.id" /*, "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"*/}
+	if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", "MetaForce Auto Backup Notification", []string{"program_log.txt"}); err != nil {
+		fmt.Println("9. Send Email Error: ", err)
+	}
+	fmt.Println("9. Send Email Success")
+
 	// })
 
 	// c.Start()
@@ -159,5 +175,5 @@ func main() {
 
 }
 
-// scp -P 43210 2023-10.zip sysadmin@10.254.212.5:/home/sysadmin/project/metaforce-api/public/photo/survey
+// scp -P 43210 go-metaforce-auto-backup-media sysadmin@10.254.212.5:/home/sysadmin/project/metaforce-api/public/photo/survey
 // R@ngerKun1ng&
