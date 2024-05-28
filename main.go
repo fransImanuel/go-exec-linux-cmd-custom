@@ -11,11 +11,12 @@ import (
 )
 
 func main() {
-
 	// c := cron.New()
 	// c.AddFunc("0 0 1 * *", func() {
 
 	// 1. get list directory to find the oldest with YYYY-MM format
+	fmt.Println("---------------------------Program Started-----------------------------")
+	fmt.Printf("----------------------------%v---------------------------\n", time.Now())
 	entries, err := os.ReadDir("./")
 	if err != nil {
 		log.Fatal(err)
@@ -111,13 +112,39 @@ func main() {
 
 	// Process the file list
 	remoteEntries := strings.Split(fileList, "\n")
+
+	// 7. get list directory to find the oldest with YYYY-MM format in the 2nd VM
+	var oldestFolder2ndVM string
+	var oldestTime2ndVM time.Time
 	for _, e := range remoteEntries {
 		if e == "" {
 			continue
 		}
-		// Perform necessary operations with the files
-		fmt.Println("Processing file: ", e)
+		strs := strings.Split(e, "-")
+		if len(strs) != 2 {
+			continue
+		}
+		year, err := strconv.Atoi(strs[0])
+		if err != nil {
+			fmt.Println("7-1. Error : ", err)
+		}
+		month, err := strconv.Atoi(strs[1])
+		if err != nil {
+			fmt.Println("7-2. Error : ", err)
+		}
+
+		currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
+		if oldestTime2ndVM.IsZero() || currentTime.Before(oldestTime2ndVM) {
+			oldestTime2ndVM = currentTime
+			oldestFolder2ndVM = fmt.Sprintf("%d-%s", year, strs[1])
+		}
 	}
+	fmt.Println("7. Successfuly get the oldest folder in 2nd VM : ", oldestFolder2ndVM)
+
+	// 8. Remove oldest  File in 2nd VM
+
+	fmt.Println("---------------------------Program Finished-----------------------------")
+	fmt.Printf("----------------------------%v---------------------------\n", time.Now())
 	// })
 
 	// c.Start()
