@@ -139,15 +139,16 @@ func main() {
 	fmt.Println("7. Successfuly get the oldest folder in 2nd VM : ", oldestFolder2ndVM)
 
 	// 8. Remove oldest folder in 2nd VM
-	// remoteOldestFolder := remoteUnzipDir + oldestFolder2ndVM
-	// sshCommand = fmt.Sprintf("rm -rf %s", remoteOldestFolder)
+	remoteOldestFolder := remoteUnzipDir + oldestFolder2ndVM
+	sshCommand = fmt.Sprintf("rm -rf %s", remoteOldestFolder)
+	fmt.Println("8. command that will be used ", sshCommand)
 	// cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
 	// stdout, err = cmd.CombinedOutput()
 	// if err != nil {
 	// 	fmt.Println("8. ", err)
 	// }
-	// fmt.Println("8. Remove oldest folder in 2nd VM success : ", string(stdout))
-	fmt.Println("8. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder, string(stdout))
+	// fmt.Println("8. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
+	fmt.Println("8. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
 
 	fmt.Printf("\n------------------Program Finished at %v------------------\n", time.Now())
 	// })
