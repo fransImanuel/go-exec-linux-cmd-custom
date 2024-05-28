@@ -83,8 +83,8 @@ func main() {
 	// if err != nil {
 	// 	fmt.Println("4-2. ", err)
 	// }
-	// fmt.Println("4. Remove File ", oldestFolder, " Success")
-	fmt.Println("4. Remove File ", oldestFolder, " SKIPPED( on comment )")
+	// fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
+	fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine SKIPPED( on comment )")
 
 	// 5. SSH into the target machine, unzip the file, and remove the zip file
 	remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
@@ -159,5 +159,5 @@ func main() {
 
 }
 
-// sudo zip -r 2023-10.zip 2023-10
-// R@ngerHit@m007
+// scp -P 43210 2023-10.zip sysadmin@10.254.212.5:/home/sysadmin/project/metaforce-api/public/photo/survey
+// R@ngerKun1ng&
