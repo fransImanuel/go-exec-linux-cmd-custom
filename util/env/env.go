@@ -41,24 +41,26 @@ func GetSMTPConfig() *dto.SMTPConfig {
 	smtpPassword := GodotEnv(constant.ENV_SMTP_PASSWORD)
 	smtpName := GodotEnv(constant.ENV_SMTP_NAME)
 
+	fmt.Println(smtpHost, smtpPort, smtpEmail, smtpPassword, smtpName)
+
 	if smtpHost == "" {
-		smtpHost = constant.DEFAULT_SMTP_HOST
+		smtpHost = "smtp.gmail.com"
 	}
 
 	if smtpPort < 1 {
-		smtpPort = constant.DEFAULT_SMTP_PORT
+		smtpPort = 587
 	}
 
 	if smtpEmail == "" {
-		smtpEmail = constant.DEFAULT_SMTP_EMAIL
+		smtpEmail = "opsol.metacrm@gmail.com"
 	}
 
 	if smtpPassword == "" {
-		smtpPassword = constant.DEFAULT_SMTP_PASSWORD
+		smtpPassword = "ondrvqwqimgsvjmz"
 	}
 
 	if smtpName == "" {
-		smtpName = constant.DEFAULT_SMTP_NAME
+		smtpName = "metaforce auto backup Logs"
 	}
 
 	config := &dto.SMTPConfig{
