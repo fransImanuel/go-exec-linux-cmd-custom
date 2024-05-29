@@ -55,7 +55,7 @@ func main() {
 
 	}
 
-	fmt.Println("1. Successfuly get the oldest folder : ", oldestFolder)
+	fmt.Println("1. Successfuly get the oldest folder in 1st VM: ", oldestFolder)
 
 	// 2. Zip The folder
 	zipFolder := oldestFolder + ".zip"
@@ -65,7 +65,7 @@ func main() {
 		fmt.Println("2. ", err)
 	}
 	// fmt.Println("2. Zip Sucess : ", string(stdout))
-	fmt.Println("2. Zip Sucess ")
+	fmt.Println("2. Zip Sucess in 1st VM")
 
 	// 3. Send File using scp
 	host := "sysadmin@10.254.212.4"
@@ -76,7 +76,7 @@ func main() {
 	if err != nil {
 		fmt.Println("3. ", err)
 	}
-	fmt.Println("3. SCP success : ", string(stdout))
+	fmt.Println("3. SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
 
 	// // 4. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
 	// cmd = exec.Command("rm", zipFolder)
@@ -90,7 +90,7 @@ func main() {
 	// 	fmt.Println("4-2. ", err)
 	// }
 	// fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
-	fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine SKIPPED( on comment )")
+	fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in 1st VM SKIPPED( on comment )")
 
 	// 5. SSH into the target machine, unzip the file, and remove the zip file
 	remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
@@ -101,7 +101,7 @@ func main() {
 	if err != nil {
 		fmt.Println("5. ", err)
 	}
-	fmt.Println("5. Unzip and remove zip file on remote success ")
+	fmt.Println("5. Unzip and remove zip file on 2nd VM ")
 	// fmt.Println("5. Unzip and remove zip file on remote success : ", string(stdout))
 
 	// 6. SSH into the target machine to list files
@@ -111,7 +111,7 @@ func main() {
 	if err != nil {
 		fmt.Println("6. ", err)
 	}
-	fmt.Println("6. List files on remote success : ", string(stdout))
+	fmt.Println("6. List files on 2nd VM : ", string(stdout))
 
 	// 7. get list directory to find the oldest with YYYY-MM format in the 2nd VM
 	// Process the list of files on the remote machine
