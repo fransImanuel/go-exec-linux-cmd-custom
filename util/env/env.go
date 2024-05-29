@@ -2,10 +2,8 @@ package env
 
 import (
 	"fmt"
-	"go-exec-linux-cmd-custom/constant"
 	"go-exec-linux-cmd-custom/dto"
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -32,36 +30,11 @@ func GodotEnv(key string) string {
 }
 
 func GetSMTPConfig() *dto.SMTPConfig {
-	smtpHost := GodotEnv(constant.ENV_SMTP_HOST)
-	smtpPort, err := strconv.Atoi(GodotEnv(constant.ENV_SMTP_PORT))
-	if err != nil {
-		fmt.Println("GetSMTPConfig() - error while parsing smtp port: ", err)
-	}
-	smtpEmail := GodotEnv(constant.ENV_SMTP_EMAIL)
-	smtpPassword := GodotEnv(constant.ENV_SMTP_PASSWORD)
-	smtpName := GodotEnv(constant.ENV_SMTP_NAME)
-
-	fmt.Println(smtpHost, smtpPort, smtpEmail, smtpPassword, smtpName)
-
-	if smtpHost == "" {
-		smtpHost = "smtp.gmail.com"
-	}
-
-	if smtpPort < 1 {
-		smtpPort = 587
-	}
-
-	if smtpEmail == "" {
-		smtpEmail = "opsol.metacrm@gmail.com"
-	}
-
-	if smtpPassword == "" {
-		smtpPassword = "ondrvqwqimgsvjmz"
-	}
-
-	if smtpName == "" {
-		smtpName = "metaforce auto backup Logs"
-	}
+	smtpHost := "smtp.gmail.com"
+	smtpPort := 587
+	smtpEmail := "opsol.metacrm@gmail.com"
+	smtpPassword := "ondrvqwqimgsvjmz"
+	smtpName := "metaforce auto backup Logs"
 
 	config := &dto.SMTPConfig{
 		Host:     smtpHost,

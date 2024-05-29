@@ -60,7 +60,7 @@ func main() {
 	// 2. Zip The folder
 	zipFolder := oldestFolder + ".zip"
 	cmd := exec.Command("zip", "-r", zipFolder, oldestFolder)
-	// stdout, err := cmd.Output()
+	stdout, err := cmd.Output()
 	if err != nil {
 		fmt.Println("2. ", err)
 	}
@@ -72,7 +72,7 @@ func main() {
 	targetMachine := host + ":/var/www/html/public/photo/survey/"
 	password := "R@ngerHi7au*"
 	cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
-	stdout, err := cmd.CombinedOutput()
+	stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("3. ", err)
 	}
@@ -97,7 +97,7 @@ func main() {
 	remoteUnzipDir := "/var/www/html/public/photo/survey/"
 	sshCommand := fmt.Sprintf("unzip -o %s -d %s && rm %s", remoteZipFile, remoteUnzipDir, remoteZipFile)
 	cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
-	// stdout, err = cmd.CombinedOutput()
+	stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("5. ", err)
 	}
@@ -163,7 +163,7 @@ func main() {
 	// // 9. Send Email
 	smtpConfig := env.GetSMTPConfig()
 	smtpClient := mail.InitEmail(smtpConfig)
-	Email := []string{"frans.imanuel@visionet.co.id", "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"}
+	Email := []string{"frans.imanuel@visionet.co.id" /*, "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"*/}
 	if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", "MetaForce Auto Backup Notification", []string{"program_log.txt"}); err != nil {
 		fmt.Println("9. Send Email Error: ", err)
 	}
