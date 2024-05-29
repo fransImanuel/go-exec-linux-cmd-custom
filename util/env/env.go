@@ -5,7 +5,6 @@ import (
 	"go-exec-linux-cmd-custom/constant"
 	"go-exec-linux-cmd-custom/dto"
 	"os"
-	"path/filepath"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -22,12 +21,12 @@ func GodotEnv(key string) string {
 	env := make(chan string, 1)
 	//fmt.Println(os.Getenv("GO_ENV"))
 
-	if os.Getenv("GO_ENV") != "production" {
-		godotenv.Load(filepath.Join(".env"))
-		env <- os.Getenv(key)
-	} else {
-		env <- os.Getenv(key)
-	}
+	// if os.Getenv("GO_ENV") != "production" {
+	// 	godotenv.Load(filepath.Join(".env"))
+	// 	env <- os.Getenv(key)
+	// } else {
+	// }
+	env <- os.Getenv(key)
 
 	return <-env
 }

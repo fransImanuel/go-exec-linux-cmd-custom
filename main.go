@@ -177,3 +177,5 @@ func main() {
 
 // scp -P 43210 go-metaforce-auto-backup-media sysadmin@10.254.212.5:/home/sysadmin/project/metaforce-api/public/photo/survey
 // R@ngerKun1ng&
+
+// ./go-metaforce-auto-backup-media > program_log.txt 2>&1 &
