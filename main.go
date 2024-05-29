@@ -60,18 +60,19 @@ func main() {
 	// 2. Zip The folder
 	zipFolder := oldestFolder + ".zip"
 	cmd := exec.Command("zip", "-r", zipFolder, oldestFolder)
-	stdout, err := cmd.Output()
+	// stdout, err := cmd.Output()
 	if err != nil {
 		fmt.Println("2. ", err)
 	}
-	fmt.Println("2. Zip Sucess : ", string(stdout))
+	// fmt.Println("2. Zip Sucess : ", string(stdout))
+	fmt.Println("2. Zip Sucess ")
 
 	// 3. Send File using scp
 	host := "sysadmin@10.254.212.4"
 	targetMachine := host + ":/var/www/html/public/photo/survey/"
 	password := "R@ngerHi7au*"
 	cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
-	stdout, err = cmd.CombinedOutput()
+	stdout, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("3. ", err)
 	}
@@ -96,11 +97,12 @@ func main() {
 	remoteUnzipDir := "/var/www/html/public/photo/survey/"
 	sshCommand := fmt.Sprintf("unzip -o %s -d %s && rm %s", remoteZipFile, remoteUnzipDir, remoteZipFile)
 	cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
-	stdout, err = cmd.CombinedOutput()
+	// stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("5. ", err)
 	}
-	fmt.Println("5. Unzip and remove zip file on remote success : ", string(stdout))
+	fmt.Println("5. Unzip and remove zip file on remote success ")
+	// fmt.Println("5. Unzip and remove zip file on remote success : ", string(stdout))
 
 	// 6. SSH into the target machine to list files
 	sshCommand = fmt.Sprintf("ls %s", remoteUnzipDir)
