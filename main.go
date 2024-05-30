@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	fmt.Println("************Program Starting************", time.Now())
 	c := cron.New()
 	// // setial bulan jam 2 pagi tanggal 5
 	textResult := ""
