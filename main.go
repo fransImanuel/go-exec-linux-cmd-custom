@@ -16,18 +16,23 @@ import (
 
 func main() {
 	host := flag.String("host@ip", "", "example: sysadmin@192.168.1.1")
+	password := flag.String("password", "", "password")
 	// Parse the flags
 	flag.Parse()
 	if *host == "" {
 		panic("need to define host@ip flag")
 	}
-	fmt.Println("Registered host is " + *host)
+	if *password == "" {
+		panic("need to define password flag")
+	}
+	fmt.Println("Registered host is "+*host+" and password is ", *password)
 	// panic(1)
 	fmt.Println("************Program Starting************", time.Now())
-	// c := cron.New()
+
 	// // setial bulan jam 2 pagi tanggal 5
 	textResult := ""
 	startTime := time.Now()
+	// c := cron.New()
 	// c.AddFunc("0 2 5 * *", func() {
 
 	// 1. get list directory to find the oldest with YYYY-MM format
@@ -82,10 +87,8 @@ func main() {
 	textResult += fmt.Sprintf("2. Zip Sucess in 1st VM<br>\n")
 
 	// 3. Send File using scp
-	// host := "sysadmin@10.254.212.4"
 	targetMachine := *host + ":/var/www/html/public/photo/survey/"
-	password := "R@ngerHi7au*"
-	cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
+	cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
 	stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("3. ", err)
@@ -112,7 +115,7 @@ func main() {
 	remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
 	remoteUnzipDir := "/var/www/html/public/photo/survey/"
 	sshCommand := fmt.Sprintf("unzip -o %s -d %s && rm %s", remoteZipFile, remoteUnzipDir, remoteZipFile)
-	cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", *host, sshCommand)
+	cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, sshCommand)
 	stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("5. ", err)
@@ -123,7 +126,7 @@ func main() {
 
 	// 6. SSH into the target machine to list files
 	sshCommand = fmt.Sprintf("ls %s", remoteUnzipDir)
-	cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", *host, sshCommand)
+	cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, sshCommand)
 	stdout, err = cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println("6. ", err)
@@ -194,12 +197,6 @@ func main() {
 
 	// })
 	// c.Start()
-
-	select {}
+	// select {}
 
 }
-
-// scp -P 43210 go-metaforce-auto-backup-media sysadmin@10.254.212.5:/home/sysadmin/project/metaforce-api/public/photo/survey
-// R@ngerKun1ng&
-
-// ./go-metaforce-auto-backup-media > program_log.txt 2>&1 &
