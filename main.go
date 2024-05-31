@@ -19,7 +19,10 @@ func main() {
 	host := flag.String("host@ip", "", "example: sysadmin@192.168.1.1")
 	// Parse the flags
 	flag.Parse()
-	// fmt.Println(*host)
+	if *host == "" {
+		panic("need to define host@ip flag")
+	}
+	fmt.Println("Registered host is " + *host)
 	// panic(1)
 	fmt.Println("************Program Starting************", time.Now())
 	c := cron.New()
