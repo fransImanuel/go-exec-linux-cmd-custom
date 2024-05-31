@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"go-exec-linux-cmd-custom/util/env"
 	"go-exec-linux-cmd-custom/util/mail"
@@ -15,6 +16,11 @@ import (
 )
 
 func main() {
+	host := flag.String("host@ip", "", "example: sysadmin@192.168.1.1")
+	// Parse the flags
+	flag.Parse()
+	// fmt.Println(*host)
+	// panic(1)
 	fmt.Println("************Program Starting************", time.Now())
 	c := cron.New()
 	// // setial bulan jam 2 pagi tanggal 5
@@ -74,8 +80,8 @@ func main() {
 		textResult += fmt.Sprintf("2. Zip Sucess in 1st VM<br>\n")
 
 		// 3. Send File using scp
-		host := "sysadmin@10.254.212.4"
-		targetMachine := host + ":/var/www/html/public/photo/survey/"
+		// host := "sysadmin@10.254.212.4"
+		targetMachine := *host + ":/var/www/html/public/photo/survey/"
 		password := "R@ngerHi7au*"
 		cmd = exec.Command("sshpass", "-p", password, "scp", "-P", "43210", zipFolder, targetMachine)
 		stdout, err = cmd.CombinedOutput()
@@ -104,7 +110,7 @@ func main() {
 		remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
 		remoteUnzipDir := "/var/www/html/public/photo/survey/"
 		sshCommand := fmt.Sprintf("unzip -o %s -d %s && rm %s", remoteZipFile, remoteUnzipDir, remoteZipFile)
-		cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
+		cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", *host, sshCommand)
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
 			fmt.Println("5. ", err)
@@ -115,7 +121,7 @@ func main() {
 
 		// 6. SSH into the target machine to list files
 		sshCommand = fmt.Sprintf("ls %s", remoteUnzipDir)
-		cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
+		cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", *host, sshCommand)
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
 			fmt.Println("6. ", err)
