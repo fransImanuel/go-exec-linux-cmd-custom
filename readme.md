@@ -57,14 +57,14 @@ CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-s -w" -o go-m
 After the code compiled, compiler will generate file named "go-metaforce-auto-backup-media", you can run the code using this command
 
 ```bash
-./go-metaforce-auto-backup-media > program_log.txt 2>&1 &
+./go-metaforce-auto-backup-media -host@ip="sysadmin@10.254.212.4"  -password="R@ngerHi7au*" > program_log.txt 2>&1 &
 ```
 Command above print the output in file named "program_log"
 
 ## Optional
 Usually before I run 
 ```bash
-./go-metaforce-auto-backup-media > program_log.txt 2>&1 &
+./go-metaforce-auto-backup-media -host@ip="sysadmin@10.254.212.4"  -password="R@ngerHi7au*" > program_log.txt 2>&1 &
 ```
 
 I test the program by creating the temporary folder such as 
