@@ -49,7 +49,11 @@ func main() {
 
 		var oldestFolder string
 		var oldestTime time.Time
+		fmt.Printf("1. List Folder in 1st VM : ")
+		textResult += fmt.Sprintf("1. List Folder in 1st VM : ")
 		for _, e := range entries {
+			fmt.Printf(e.Name(), " ")
+			textResult += fmt.Sprintf(e.Name(), " ")
 			strs := strings.Split(e.Name(), "-")
 			if len(strs) != 2 {
 				continue
@@ -70,72 +74,73 @@ func main() {
 				oldestTime = currentTime
 				oldestFolder = fmt.Sprintf("%d-%s", year, strs[1])
 			}
-
 		}
+		textResult += "<br>"
+		fmt.Println()
 
-		fmt.Println("1. Successfuly get the oldest folder in 1st VM: ", oldestFolder)
-		textResult += fmt.Sprintf("1. Successfuly get the oldest folder in 1st VM: %s<br>\n", oldestFolder)
+		fmt.Println("2. Successfuly get the oldest folder in 1st VM: ", oldestFolder)
+		textResult += fmt.Sprintf("2. Successfuly get the oldest folder in 1st VM: %s<br>\n", oldestFolder)
 
-		// 2. Zip The folder
+		// 3. Zip The folder
 		zipFolder := oldestFolder + ".zip"
 		cmd := exec.Command("zip", "-r", zipFolder, oldestFolder)
 		stdout, err := cmd.Output()
 		if err != nil {
-			fmt.Println("2. ", err)
+			fmt.Println("3. ", err)
 		}
-		// fmt.Println("2. Zip Sucess : ", string(stdout))
-		fmt.Println("2. Zip Sucess in 1st VM")
-		textResult += fmt.Sprintf("2. Zip Sucess in 1st VM<br>\n")
+		// fmt.Println("3. Zip Sucess : ", string(stdout))
+		fmt.Println("3. Zip Sucess in 1st VM")
+		textResult += fmt.Sprintf("3. Zip Sucess in 1st VM<br>\n")
 
-		// 3. Send File using scp
+		// 4. Send File using scp
 		targetMachine := *host + ":/var/www/html/public/photo/survey/"
 		cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("3. ", err)
+			fmt.Println("4. ", err)
 		}
-		fmt.Println("3. SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
-		textResult += fmt.Sprintf("3. SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
+		fmt.Println("4. SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
+		textResult += fmt.Sprintf("4. SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
 
-		// // 4. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
+		// // 5. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
 		// cmd = exec.Command("rm", zipFolder)
 		// stdout, err = cmd.Output()
 		// if err != nil {
-		// 	fmt.Println("4-1. ", err)
+		// 	fmt.Println("5-1. ", err)
 		// }
 		// cmd = exec.Command("rm", "-rf", oldestFolder)
 		// stdout, err = cmd.Output()
 		// if err != nil {
-		// 	fmt.Println("4-2. ", err)
+		// 	fmt.Println("5-2. ", err)
 		// }
-		// fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
-		fmt.Println("4. Remove File ", oldestFolder, " and zipped ", zipFolder, " in 1st VM SKIPPED( on comment )")
-		textResult += fmt.Sprintf("4. Remove File %s and zipped %s in 1st VM SKIPPED( on comment )<br>\n", oldestFolder, zipFolder)
+		// fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
+		fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in 1st VM SKIPPED( on comment )")
+		textResult += fmt.Sprintf("5. Remove File %s and zipped %s in 1st VM SKIPPED( on comment )<br>\n", oldestFolder, zipFolder)
 
-		// 5. SSH into the target machine, unzip the file, and remove the zip file
+		// 6. SSH into the target machine, unzip the file, and remove the zip file
 		remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
 		remoteUnzipDir := "/var/www/html/public/photo/survey/"
 		sshCommand := fmt.Sprintf("unzip -o %s -d %s && rm %s", remoteZipFile, remoteUnzipDir, remoteZipFile)
 		cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, sshCommand)
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("5. ", err)
+			fmt.Println("6. ", err)
 		}
-		fmt.Println("5. Unzip and remove zip file on 2nd VM ")
-		textResult += fmt.Sprintf("5. Unzip and remove zip file on 2nd VM <br>\n")
-		// fmt.Println("5. Unzip and remove zip file on remote success : ", string(stdout))
+		fmt.Println("6. Unzip and remove zip file on 2nd VM ")
+		textResult += fmt.Sprintf("6. Unzip and remove zip file on 2nd VM <br>\n")
+		// fmt.Println("6. Unzip and remove zip file on remote success : ", string(stdout))
 
-		// 6. SSH into the target machine to list files
+		// 7. SSH into the target machine to list files
 		sshCommand = fmt.Sprintf("ls %s", remoteUnzipDir)
 		cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, sshCommand)
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("6. ", err)
+			fmt.Println("7. ", err)
 		}
-		fmt.Println("6. List files on 2nd VM : ", string(stdout))
-		textResult += fmt.Sprintf("6. List files on 2nd VM : %s\n<br>", string(stdout))
+		fmt.Println("7. List files on 2nd VM : ", string(stdout))
+		textResult += fmt.Sprintf("7. List files on 2nd VM : %s\n<br>", string(stdout))
 
-		// 7. get list directory to find the oldest with YYYY-MM format in the 2nd VM
+		// 8. get list directory to find the oldest with YYYY-MM format in the 2nd VM
 		// Process the list of files on the remote machine
 		fileList := string(stdout)
 		// Process the file list
@@ -152,11 +157,11 @@ func main() {
 			}
 			year, err := strconv.Atoi(strs[0])
 			if err != nil {
-				fmt.Println("7-1. Error : ", err)
+				fmt.Println("8-1. Error : ", err)
 			}
 			month, err := strconv.Atoi(strs[1])
 			if err != nil {
-				fmt.Println("7-2. Error : ", err)
+				fmt.Println("8-2. Error : ", err)
 			}
 
 			currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
@@ -165,23 +170,23 @@ func main() {
 				oldestFolder2ndVM = fmt.Sprintf("%d-%s", year, strs[1])
 			}
 		}
-		fmt.Println("7. Successfuly get the oldest folder in 2nd VM : ", oldestFolder2ndVM)
-		textResult += fmt.Sprintf("7. Successfuly get the oldest folder in 2nd VM : %s<br>\n", oldestFolder2ndVM)
+		fmt.Println("8. Successfuly get the oldest folder in 2nd VM : ", oldestFolder2ndVM)
+		textResult += fmt.Sprintf("8. Successfuly get the oldest folder in 2nd VM : %s<br>\n", oldestFolder2ndVM)
 
-		// 8. Remove oldest folder in 2nd VM
+		// 9. Remove oldest folder in 2nd VM
 		remoteOldestFolder := remoteUnzipDir + oldestFolder2ndVM
 		sshCommand = fmt.Sprintf("rm -rf %s", remoteOldestFolder)
-		fmt.Println("8. command that will be used ", sshCommand)
+		fmt.Println("9. command that will be used ", sshCommand)
 		textResult += sshCommand + "<br>"
 
 		// cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
 		// stdout, err = cmd.CombinedOutput()
 		// if err != nil {
-		// 	fmt.Println("8. ", err)
+		// 	fmt.Println("9. ", err)
 		// }
-		// fmt.Println("8. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
-		fmt.Println("8. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
-		textResult += fmt.Sprintf("8. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : %s<br>\n", oldestFolder2ndVM)
+		// fmt.Println("9. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
+		fmt.Println("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
+		textResult += fmt.Sprintf("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : %s<br>\n", oldestFolder2ndVM)
 
 		finishedTime := time.Now()
 		fmt.Printf("\n--------Program Finished at %v--------\n", finishedTime)
