@@ -114,19 +114,19 @@ func main() {
 		fmt.Println("4. SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
 		textResult += fmt.Sprintf("4. SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
 
-		// // 5. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
-		// cmd = exec.Command("rm", zipFolder)
-		// stdout, err = cmd.Output()
-		// if err != nil {
-		// 	fmt.Println("5-1. ", err)
-		// }
-		// cmd = exec.Command("rm", "-rf", oldestFolder)
-		// stdout, err = cmd.Output()
-		// if err != nil {
-		// 	fmt.Println("5-2. ", err)
-		// }
-		// fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
-		fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in 1st VM SKIPPED( on comment )")
+		// 5. Remove oldest  File : ", oldestFolder, " - ", string(stdout))
+		cmd = exec.Command("rm", zipFolder)
+		stdout, err = cmd.Output()
+		if err != nil {
+			fmt.Println("5-1. ", err)
+		}
+		cmd = exec.Command("rm", "-rf", oldestFolder)
+		stdout, err = cmd.Output()
+		if err != nil {
+			fmt.Println("5-2. ", err)
+		}
+		fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
+		// fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in 1st VM SKIPPED( on comment )")
 		textResult += fmt.Sprintf("5. Remove File %s and zipped %s in 1st VM SKIPPED( on comment )<br>\n", oldestFolder, zipFolder)
 
 		// 6. SSH into the target machine, unzip the file, and remove the zip file
@@ -195,13 +195,13 @@ func main() {
 		fmt.Println("9. command that will be used ", sshCommand)
 		textResult += sshCommand + "<br>"
 
-		// cmd = exec.Command("sshpass", "-p", password, "ssh", "-p", "43210", "sysadmin@10.254.212.4", sshCommand)
-		// stdout, err = cmd.CombinedOutput()
-		// if err != nil {
-		// 	fmt.Println("9. ", err)
-		// }
-		// fmt.Println("9. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
-		fmt.Println("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
+		cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, sshCommand)
+		stdout, err = cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println("9. ", err)
+		}
+		fmt.Println("9. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
+		// fmt.Println("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
 		textResult += fmt.Sprintf("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : %s<br>\n", oldestFolder2ndVM)
 
 		finishedTime := time.Now()
