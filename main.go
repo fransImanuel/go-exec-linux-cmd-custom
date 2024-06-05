@@ -127,7 +127,8 @@ func main() {
 		}
 		fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in current machine  Success")
 		// fmt.Println("5. Remove File ", oldestFolder, " and zipped ", zipFolder, " in 1st VM SKIPPED( on comment )")
-		textResult += fmt.Sprintf("5. Remove File %s and zipped %s in 1st VM SKIPPED( on comment )<br>\n", oldestFolder, zipFolder)
+		// textResult += fmt.Sprintf("5. Remove File %s and zipped %s in 1st VM SKIPPED( on comment )<br>\n", oldestFolder, zipFolder)
+		textResult += fmt.Sprintf("5. Remove File %s and zipped %s in 1st VM <br>\n", oldestFolder, zipFolder)
 
 		// 6. SSH into the target machine, unzip the file, and remove the zip file
 		remoteZipFile := "/var/www/html/public/photo/survey/" + zipFolder
@@ -202,7 +203,8 @@ func main() {
 		}
 		fmt.Println("9. Remove oldest folder in 2nd VM success : ", oldestFolder2ndVM, string(stdout))
 		// fmt.Println("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : ", oldestFolder2ndVM)
-		textResult += fmt.Sprintf("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : %s<br>\n", oldestFolder2ndVM)
+		// textResult += fmt.Sprintf("9. Remove oldest folder in 2nd VM SKIPPED ( on comment ) : %s<br>\n", oldestFolder2ndVM)
+		textResult += fmt.Sprintf("9. Remove oldest folder in 2nd VM success : %s<br>\n", oldestFolder2ndVM)
 
 		finishedTime := time.Now()
 		fmt.Printf("\n--------Program Finished at %v--------\n", finishedTime)
