@@ -201,7 +201,7 @@ func main() {
 		// // 9. Send Email
 		smtpConfig := env.GetSMTPConfig()
 		smtpClient := mail.InitEmail(smtpConfig)
-		Email := []string{"frans.imanuel@visionet.co.id", "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"}
+		Email := []string{"frans.imanuel@visionet.co.id" /*, "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"*/}
 		if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", textResult, []string{"program_log.txt"}); err != nil {
 			fmt.Println("9. Send Email Error: ", err)
 			panic(1)
