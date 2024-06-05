@@ -61,12 +61,12 @@ func main() {
 			year, err := strconv.Atoi(strs[0])
 			if err != nil {
 				fmt.Println("1-1. Error : ", err)
-				// panic(1)
+				panic(1)
 			}
 			month, err := strconv.Atoi(strs[1])
 			if err != nil {
 				fmt.Println("1-2. Error : ", err)
-				// panic(1)
+				panic(1)
 			}
 
 			currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
@@ -87,6 +87,7 @@ func main() {
 		stdout, err := cmd.Output()
 		if err != nil {
 			fmt.Println("3. ", err)
+			panic(1)
 		}
 		// fmt.Println("3. Zip Sucess : ", string(stdout))
 		fmt.Println("3. Zip Sucess in 1st VM")
@@ -98,6 +99,7 @@ func main() {
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
 			fmt.Println("4. ", err)
+			panic(1)
 		}
 		fmt.Println("4. SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
 		textResult += fmt.Sprintf("4. SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
@@ -125,6 +127,7 @@ func main() {
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
 			fmt.Println("6. ", err)
+			panic(1)
 		}
 		fmt.Println("6. Unzip and remove zip file on 2nd VM ")
 		textResult += fmt.Sprintf("6. Unzip and remove zip file on 2nd VM <br>\n")
@@ -136,6 +139,7 @@ func main() {
 		stdout, err = cmd.CombinedOutput()
 		if err != nil {
 			fmt.Println("7. ", err)
+			panic(1)
 		}
 		fmt.Println("7. List files on 2nd VM : ", string(stdout))
 		textResult += fmt.Sprintf("7. List files on 2nd VM : %s\n<br>", string(stdout))
@@ -158,10 +162,12 @@ func main() {
 			year, err := strconv.Atoi(strs[0])
 			if err != nil {
 				fmt.Println("8-1. Error : ", err)
+				panic(1)
 			}
 			month, err := strconv.Atoi(strs[1])
 			if err != nil {
 				fmt.Println("8-2. Error : ", err)
+				panic(1)
 			}
 
 			currentTime := time.Date(year, time.Month(month), 1, 1, 1, 1, 0, time.UTC)
@@ -198,6 +204,7 @@ func main() {
 		Email := []string{"frans.imanuel@visionet.co.id", "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"}
 		if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", textResult, []string{"program_log.txt"}); err != nil {
 			fmt.Println("9. Send Email Error: ", err)
+			panic(1)
 		}
 		fmt.Println("9. Send Email Success")
 
