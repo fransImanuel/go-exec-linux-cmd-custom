@@ -61,7 +61,7 @@ func main() {
 	textResult += fmt.Sprintf("1. List Folder in 1st VM : ")
 	for _, e := range entries {
 		fmt.Printf("%s ", e.Name())
-		textResult += fmt.Sprintf(e.Name(), " ")
+		textResult += fmt.Sprintf("%s ", e.Name())
 		strs := strings.Split(e.Name(), "-")
 		if len(strs) != 2 {
 			continue
@@ -209,7 +209,7 @@ func main() {
 	// // 9. Send Email
 	smtpConfig := env.GetSMTPConfig()
 	smtpClient := mail.InitEmail(smtpConfig)
-	Email := []string{"frans.imanuel@visionet.co.id" /*, "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"*/}
+	Email := []string{"frans.imanuel@visionet.co.id", "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"}
 	if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", textResult, []string{"program_log.txt"}); err != nil {
 		fmt.Println("9. Send Email Error: ", err)
 		panic(1)
@@ -218,6 +218,6 @@ func main() {
 
 	// })
 	// c.Start()
-	select {}
+	// select {}
 
 }
