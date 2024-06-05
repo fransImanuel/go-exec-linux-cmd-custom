@@ -30,6 +30,16 @@ func main() {
 	// panic(1)
 	fmt.Println("************Program Starting************", time.Now())
 
+	//Check SSH credentials
+	checkCmd := exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", "-o", "StrictHostKeyChecking=no", *host, "echo", "SSH connection successful")
+	checkOutput, err := checkCmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("SSH authentication failed: ", err)
+		fmt.Println(string(checkOutput))
+		panic(1)
+	}
+	fmt.Println("SSH authentication successful: ", string(checkOutput))
+
 	// // setial bulan jam 2 pagi tanggal 5
 	textResult := ""
 	startTime := time.Now()
