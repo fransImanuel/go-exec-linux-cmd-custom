@@ -52,7 +52,7 @@ func main() {
 		fmt.Printf("1. List Folder in 1st VM : ")
 		textResult += fmt.Sprintf("1. List Folder in 1st VM : ")
 		for _, e := range entries {
-			fmt.Printf(e.Name(), " ")
+			fmt.Printf("%s ", e.Name())
 			textResult += fmt.Sprintf(e.Name(), " ")
 			strs := strings.Split(e.Name(), "-")
 			if len(strs) != 2 {
