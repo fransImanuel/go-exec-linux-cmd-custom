@@ -323,8 +323,7 @@ func main() {
 	cmd := exec.Command("zip", "-r", zipFolder, mongoDBBackupFormatName)
 	stdout, err := cmd.Output()
 	if err != nil {
-		fmt.Println("[*]", err)
-		panic(1)
+		fmt.Println("[*]", err.Error(), " : ", string(stdout))
 	}
 
 	// [*]. Send File using scp
