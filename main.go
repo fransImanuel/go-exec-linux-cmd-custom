@@ -279,8 +279,8 @@ func main() {
 	endDate := time.Date(yearNow, monthNow, 1, 0, 0, 0, 0, time.UTC)
 	filter := bson.M{
 		"ScheduleVisit": bson.M{
-			"$gte": startDate.Format(time.RFC3339),
-			"$lt":  endDate.Format(time.RFC3339),
+			"$gte": startDate,
+			"$lt":  endDate,
 		},
 	}
 
