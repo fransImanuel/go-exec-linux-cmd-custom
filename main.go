@@ -331,8 +331,7 @@ func main() {
 	cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
 	stdout, err = cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("[*]", err)
-		panic(1)
+		fmt.Println("[*]", err.Error(), " : ", string(stdout))
 	}
 	fmt.Println("[*]SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
 	textResult += fmt.Sprintf("[*]SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
