@@ -284,8 +284,8 @@ func main() {
 		},
 	}
 
-	fmt.Println(filter)
-	panic(1)
+	fmt.Println("filter:", filter)
+	// panic(1)
 
 	// Find documents
 	cursor, err := collection.Find(context.TODO(), filter)
