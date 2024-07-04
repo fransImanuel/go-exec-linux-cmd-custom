@@ -311,7 +311,7 @@ func main() {
 		// if err := encoder.Encode(document); err != nil {
 		// 	log.Fatal(err)
 		// }
-		fmt.Println(document)
+		fmt.Println(cursor.Current)
 	}
 
 	if err := cursor.Err(); err != nil {
