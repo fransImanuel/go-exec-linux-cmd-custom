@@ -277,10 +277,12 @@ func main() {
 	yearPrev, monthPrev, _ := previousMonth.Date()
 	startDate := time.Date(yearPrev, monthPrev, 1, 0, 0, 0, 0, time.UTC)
 	endDate := time.Date(yearNow, monthNow, 1, 0, 0, 0, 0, time.UTC)
-	filter := bson.M{
-		"ScheduleVisit": bson.M{
-			"$gte": startDate,
-			"$lt":  endDate,
+	filter := bson.D{
+		{"ScheduleVisit",
+			bson.D{
+				{"$gte", startDate},
+				{"$lt", endDate},
+			},
 		},
 	}
 
