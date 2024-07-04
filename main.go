@@ -273,17 +273,17 @@ func main() {
 
 	// Define the query
 
-	// currentTime := time.Now()
-	// previousMonth := currentTime.AddDate(0, -1, 0)
-	// yearNow, monthNow, _ := currentTime.Date()
-	// yearPrev, monthPrev, _ := previousMonth.Date()
-	// startDate := time.Date(yearPrev, monthPrev, 1, 0, 0, 0, 0, time.UTC)
-	// endDate := time.Date(yearNow, monthNow, 1, 0, 0, 0, 0, time.UTC)
+	currentTime := time.Now()
+	previousMonth := currentTime.AddDate(0, -1, 0)
+	yearNow, monthNow, _ := currentTime.Date()
+	yearPrev, monthPrev, _ := previousMonth.Date()
+	startDate := time.Date(yearPrev, monthPrev, 1, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(yearNow, monthNow, 1, 0, 0, 0, 0, time.UTC)
 	filter := bson.D{
 		{"ScheduleVisit",
 			bson.D{
-				{"$gte", time.Date(2024, 2, 1, 0, 0, 0, 0, time.UTC)},
-				{"$lt", time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC)},
+				{"$gte", startDate},
+				{"$lt", endDate},
 			},
 		},
 	}
@@ -299,7 +299,8 @@ func main() {
 	defer cursor.Close(context.TODO())
 
 	// Open output file
-	file, err := os.Create("/home/sysadmin/dev/go-exec-linux-cmd-custom/frans_backup_mongo.json")
+	FirstVMTargetDir := "/home/sysadmin/project/metaforce-api/public/photo/survey/"
+	file, err := os.Create(FirstVMTargetDir + "MongoD_Tasklist_Backup_" + startDate.Format("2006-01-02") + ".json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -315,7 +316,7 @@ func main() {
 		if err := encoder.Encode(document); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(cursor.Current)
+		// fmt.Println(cursor.Current)
 
 		// var document bson.M
 		// if err := cursor.Decode(&document); err != nil {
