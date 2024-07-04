@@ -307,7 +307,7 @@ func main() {
 	}
 
 	//check if there is 6 entries of mongodb backup, send the oldest one to 2nd VM
-	maxTotalMongoDBBackup := 6
+	// maxTotalMongoDBBackup := 6
 	countMongoDBBackup := 0
 	for _, e := range entriesMongoDB {
 		fmt.Printf("%s ", e.Name())
@@ -316,29 +316,29 @@ func main() {
 		}
 	}
 
-	if maxTotalMongoDBBackup == countMongoDBBackup {
+	// if maxTotalMongoDBBackup == countMongoDBBackup {
 
-		textResult += "<br>[Maximal save in this vm is 6, exceeding 6, processing to send to 2nd VM]"
-		zipFolder := mongoDBBackupFormatName + ".zip"
-		cmd := exec.Command("zip", "-r", zipFolder, mongoDBBackupFormatName)
-		stdout, err := cmd.Output()
-		if err != nil {
-			fmt.Println("[*]", err)
-			panic(1)
-		}
-
-		// [*]. Send File using scp
-		targetMachine := *host + ":/var/www/html/public/photo/survey/mongodb_tasklist_backup"
-		cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
-		stdout, err = cmd.CombinedOutput()
-		if err != nil {
-			fmt.Println("[*]", err)
-			panic(1)
-		}
-		fmt.Println("[*]SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
-		textResult += fmt.Sprintf("[*]SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
-
+	textResult += "<br>[Maximal save in this vm is 6, exceeding 6, processing to send to 2nd VM]"
+	zipFolder := mongoDBBackupFormatName + ".zip"
+	cmd := exec.Command("zip", "-r", zipFolder, mongoDBBackupFormatName)
+	stdout, err := cmd.Output()
+	if err != nil {
+		fmt.Println("[*]", err)
+		panic(1)
 	}
+
+	// [*]. Send File using scp
+	targetMachine := *host + ":/var/www/html/public/photo/survey/mongodb_tasklist_backup"
+	cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
+	stdout, err = cmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("[*]", err)
+		panic(1)
+	}
+	fmt.Println("[*]SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
+	textResult += fmt.Sprintf("[*]SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
+
+	// }
 	// ====================================MONGODB================================================
 
 	// 	// // 11. Send Email
