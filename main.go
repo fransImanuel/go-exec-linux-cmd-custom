@@ -319,8 +319,8 @@ func main() {
 	// if maxTotalMongoDBBackup == countMongoDBBackup {
 
 	textResult += "<br>[Maximal save in this vm is 6, exceeding 6, processing to send to 2nd VM]"
-	zipFolder := mongoDBBackupFormatName + ".zip"
-	cmd := exec.Command("zip", "-r", zipFolder, mongoDBBackupFormatName)
+	zipFolder := mongoDBBackupFullName + ".zip"
+	cmd := exec.Command("zip", "-r", zipFolder, mongoDBBackupFullName)
 	stdout, err := cmd.Output()
 	if err != nil {
 		fmt.Println("[*]", err.Error(), " : ", string(stdout))
