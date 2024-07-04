@@ -340,6 +340,12 @@ func main() {
 			fmt.Println("[*]SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
 			textResult += fmt.Sprintf("[*]SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
 
+			cmd = exec.Command("rm", zipFolder)
+			stdout, err = cmd.Output()
+			if err != nil {
+				fmt.Println("[*] ", err)
+			}
+
 		}
 		// ====================================MONGODB================================================
 
