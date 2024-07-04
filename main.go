@@ -304,14 +304,20 @@ func main() {
 	// Write documents to file
 	// encoder := json.NewEncoder(file)
 	for cursor.Next(context.TODO()) {
+		// var document bson.M
+		// if err := cursor.Decode(&document); err != nil {
+		// 	log.Fatal(err)
+		// }
+		// // if err := encoder.Encode(document); err != nil {
+		// // 	log.Fatal(err)
+		// // }
+		// fmt.Println(cursor.Current)
+
 		var document bson.M
 		if err := cursor.Decode(&document); err != nil {
 			log.Fatal(err)
 		}
-		// if err := encoder.Encode(document); err != nil {
-		// 	log.Fatal(err)
-		// }
-		fmt.Println(cursor.Current)
+		fmt.Println(document)
 	}
 
 	if err := cursor.Err(); err != nil {
