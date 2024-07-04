@@ -257,7 +257,7 @@ func main() {
 
 	// MongoDB connection URI
 	// uri := "mongodb://goodtime:HujanAir!2024!@10.10.86.142:27017/?authSource=admin"
-	uri := "mongodb://mongoAdmin:&Mer4h&Mud4&@10.254.213.3:27017/?authSource=admin"
+	uri := "mongodb://mongoAdmin:&Mer4h&Mud4&@10.254.213.3:4949/?authSource=admin"
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
