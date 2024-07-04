@@ -271,17 +271,17 @@ func main() {
 
 	// Define the query
 
-	currentTime := time.Now()
-	previousMonth := currentTime.AddDate(0, -1, 0)
-	yearNow, monthNow, _ := currentTime.Date()
-	yearPrev, monthPrev, _ := previousMonth.Date()
-	startDate := time.Date(yearPrev, monthPrev, 1, 0, 0, 0, 0, time.UTC)
-	endDate := time.Date(yearNow, monthNow, 1, 0, 0, 0, 0, time.UTC)
+	// currentTime := time.Now()
+	// previousMonth := currentTime.AddDate(0, -1, 0)
+	// yearNow, monthNow, _ := currentTime.Date()
+	// yearPrev, monthPrev, _ := previousMonth.Date()
+	// startDate := time.Date(yearPrev, monthPrev, 1, 0, 0, 0, 0, time.UTC)
+	// endDate := time.Date(yearNow, monthNow, 1, 0, 0, 0, 0, time.UTC)
 	filter := bson.D{
 		{"ScheduleVisit",
 			bson.D{
-				{"$gte", startDate},
-				{"$lt", endDate},
+				{"$gte", time.Date(2024, 2, 1, 0, 0, 0, 0, time.UTC)},
+				{"$lt", time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC)},
 			},
 		},
 	}
