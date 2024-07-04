@@ -266,7 +266,7 @@ func main() {
 	defer client.Disconnect(context.TODO())
 
 	// Select database and collection
-	db := client.Database("metaforce_dev")
+	db := client.Database("metaforce_prod")
 	collection := db.Collection("tr_tasklists")
 
 	// Define the query
