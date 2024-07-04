@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -297,29 +299,29 @@ func main() {
 	defer cursor.Close(context.TODO())
 
 	// Open output file
-	// file, err := os.Create("/var/www/html/backup_mongo.json")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer file.Close()
+	file, err := os.Create("/home/sysadmin/dev/go-exec-linux-cmd-custom/frans_backup_mongo.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
 
 	// Write documents to file
-	// encoder := json.NewEncoder(file)
+	encoder := json.NewEncoder(file)
 	for cursor.Next(context.TODO()) {
-		// var document bson.M
-		// if err := cursor.Decode(&document); err != nil {
-		// 	log.Fatal(err)
-		// }
-		// // if err := encoder.Encode(document); err != nil {
-		// // 	log.Fatal(err)
-		// // }
-		// fmt.Println(cursor.Current)
-
 		var document bson.M
 		if err := cursor.Decode(&document); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(document)
+		if err := encoder.Encode(document); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(cursor.Current)
+
+		// var document bson.M
+		// if err := cursor.Decode(&document); err != nil {
+		// 	log.Fatal(err)
+		// }
+		// fmt.Println(document)
 	}
 
 	if err := cursor.Err(); err != nil {
