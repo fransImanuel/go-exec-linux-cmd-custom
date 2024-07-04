@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,18 +17,18 @@ import (
 )
 
 func main() {
-	// host := flag.String("host@ip", "", "example: sysadmin@192.168.1.1")
-	// password := flag.String("password", "", "password")
-	// // Parse the flags
-	// flag.Parse()
-	// if *host == "" {
-	// 	panic("need to define host@ip flag")
-	// }
-	// if *password == "" {
-	// 	panic("need to define password flag")
-	// }
-	// fmt.Println("Registered host is "+*host+" and password is ", *password)
-	// // panic(1)
+	host := flag.String("host@ip", "", "example: sysadmin@192.168.1.1")
+	password := flag.String("password", "", "password")
+	// Parse the flags
+	flag.Parse()
+	if *host == "" {
+		panic("need to define host@ip flag")
+	}
+	if *password == "" {
+		panic("need to define password flag")
+	}
+	fmt.Println("Registered host is "+*host+" and password is ", *password)
+	// panic(1)
 	// fmt.Println("************Program Starting************", time.Now())
 
 	// //Check SSH credentials
@@ -39,7 +42,7 @@ func main() {
 	// fmt.Println("SSH authentication successful: ", string(checkOutput))
 
 	// // // setial bulan jam 2 pagi tanggal 5
-	// textResult := ""
+	textResult := ""
 	// startTime := time.Now()
 	// c := cron.New()
 	// c.AddFunc("0 2 5 * *", func() {
@@ -205,58 +208,14 @@ func main() {
 	// 	textResult += fmt.Sprintf("9. Remove oldest folder in 2nd VM success : %s<br>\n", oldestFolder2ndVM)
 
 	// 	finishedTime := time.Now()
-	// 	fmt.Printf("\n--------Program Finished at %v--------\n", finishedTime)
-	// 	textResult += fmt.Sprintf("\n--------Program Finished at %v--------<br>\n", finishedTime)
+	// 	fmt.Printf("\n--------Program Backup Photo Finished at %v--------\n", finishedTime)
+	// 	textResult += fmt.Sprintf("\n--------Program Backup Photo Finished at %v--------<br>\n", finishedTime)
 
-	// 	// // 9. Send Email
-	// 	smtpConfig := env.GetSMTPConfig()
-	// 	smtpClient := mail.InitEmail(smtpConfig)
-	// 	Email := []string{"frans.imanuel@visionet.co.id", "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"}
-	// 	if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", textResult, []string{"program_log.txt"}); err != nil {
-	// 		fmt.Println("9. Send Email Error: ", err)
-	// 		panic(1)
-	// 	}
-	// 	fmt.Println("9. Send Email Success")
+	//====================================MONGODB================================================
 
-	// 	//
-	// 	// // 1 ssh to db vm and run this command
-	// 	// sshpass -p IndonesiaRaya@2024! ssh -p 43210 10.254.213.3 pwd
-	// 	// cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, "pwd")
-	// 	// stdout, err = cmd.CombinedOutput()
-	// 	// if err != nil {
-	// 	// 	fmt.Println("10. ", err)
-	// 	// }
-	// 	// fmt.Println("10. Successfully enter DB VM and get working directory")
-
-	// 	// currentTime := time.Now()
-	// 	// previousMonth := currentTime.AddDate(0, -1, 0)
-	// 	// year, month, day := previousMonth.Date()
-	// 	// backupName := fmt.Sprintf("backupMongo_%d-%d-%d.json", year, month, day)
-	// 	// DbVMDir := string(stdout) + "/" + backupName
-
-	// 	// // mongoexport --port 4949 --db metaforce_prod --collection tr_tasklists --out /home/sysadmin/frans_backup_mongo_test.json --query '{"ScheduleVisit": {"$gte": {"$date": "2024-02-01T00:00:00Z"}, "$lt": {"$date": "2024-03-01T00:00:00Z"}}}' --username mongoAdmin --password '&Mer4h&Mud4&' --authenticationDatabase admin
-
-	// 	// mongoD := `mongoexport --port 4949 --db metaforce_prod --collection tr_tasklists --out ` + DbVMDir + ` --query '{"ScheduleVisit": {"$gte": {"$date": ` + previousMonth.Format(time.RFC3339) + `}, "$lt": {"$date": ` + currentTime.Format(time.RFC3339) + `}}}' --username mongoAdmin --password '&Mer4h&Mud4&' --authenticationDatabase admin`
-
-	// 	// fmt.Println("Log Mongo Query: ", DbVMDir)
-
-	// 	// cmd = exec.Command("sshpass", "-p", *password, "ssh", "-p", "43210", *host, mongoD)
-	// 	// stdout, err = cmd.CombinedOutput()
-	// 	// if err != nil {
-	// 	// 	fmt.Println("11. ", err)
-	// 	// }
-	// 	// fmt.Println("11. succesfully export mongoDB in DB VM")
-
-	// 	// 2. zip the exported file and send it to my vm
-	// 	// cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210",..)
-
-	// 	// targetMachine := *host + ":/var/www/html/public/photo/survey/"
-	// 	// cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
-
-	// 	//3. cek klo udah lebih dari 6 cari yang pling tua terus kirim ke ws1(hijau)
-
-	// 	//====================================MONGODB================================================
-
+	textResult += "------------------------------------------------------------------------------<br>"
+	textResult += "<br><b>Continue Backup TaskList from MongoDB</b><br>"
+	textResult += "------------------------------------------------------------------------------<br>"
 	// MongoDB connection URI
 	// uri := "mongodb://goodtime:HujanAir!2024!@10.10.86.142:27017/?authSource=admin"
 	uri := "mongodb://mongoAdmin:&Mer4h&Mud4&@10.254.213.3:4949/?authSource=admin"
@@ -264,7 +223,9 @@ func main() {
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
 		log.Fatal(err)
+		textResult += "10. Error backup tasklist mongodb : " + err.Error()
 	}
+	textResult += "<br>10. Success Connect to mongodb<br>"
 	defer client.Disconnect(context.TODO())
 
 	// Select database and collection
@@ -295,14 +256,18 @@ func main() {
 	cursor, err := collection.Find(context.TODO(), filter)
 	if err != nil {
 		log.Fatal(err)
+		textResult += "<br>10. Error backup tasklist mongodb : " + err.Error()
 	}
 	defer cursor.Close(context.TODO())
 
 	// Open output file
+	mongoDBBackupFormatName := "MongoD_Tasklist_Backup_"
+	mongoDBBackupFullName := mongoDBBackupFormatName + startDate.Format("2006-01-02") + ".json"
 	FirstVMTargetDir := "/home/sysadmin/project/metaforce-api/public/photo/survey/"
-	file, err := os.Create(FirstVMTargetDir + "MongoD_Tasklist_Backup_" + startDate.Format("2006-01-02") + ".json")
+	file, err := os.Create(FirstVMTargetDir + mongoDBBackupFullName)
 	if err != nil {
 		log.Fatal(err)
+		textResult += "10. Error backup tasklist mongodb : " + err.Error()
 	}
 	defer file.Close()
 
@@ -312,9 +277,11 @@ func main() {
 		var document bson.M
 		if err := cursor.Decode(&document); err != nil {
 			log.Fatal(err)
+			textResult += "10. Error backup tasklist mongodb : " + err.Error()
 		}
 		if err := encoder.Encode(document); err != nil {
 			log.Fatal(err)
+			textResult += "10. Error backup tasklist mongodb : " + err.Error()
 		}
 		// fmt.Println(cursor.Current)
 
@@ -327,10 +294,62 @@ func main() {
 
 	if err := cursor.Err(); err != nil {
 		log.Fatal(err)
+		textResult += "10. Error backup tasklist mongodb : " + err.Error()
 	}
 
 	fmt.Println("Export completed successfully!")
-	//====================================MONGODB================================================
+
+	textResult += "<br>10. Successfully extract tasklist from mongodb "
+
+	entriesMongoDB, err := os.ReadDir("./")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//check if there is 6 entries of mongodb backup, send the oldest one to 2nd VM
+	maxTotalMongoDBBackup := 6
+	countMongoDBBackup := 0
+	for _, e := range entriesMongoDB {
+		fmt.Printf("%s ", e.Name())
+		if strings.Contains(e.Name(), mongoDBBackupFormatName) {
+			countMongoDBBackup++
+		}
+	}
+
+	if maxTotalMongoDBBackup == countMongoDBBackup {
+
+		textResult += "<br>[Maximal save in this vm is 6, exceeding 6, processing to send to 2nd VM]"
+		zipFolder := mongoDBBackupFormatName + ".zip"
+		cmd := exec.Command("zip", "-r", zipFolder, mongoDBBackupFormatName)
+		stdout, err := cmd.Output()
+		if err != nil {
+			fmt.Println("[*]", err)
+			panic(1)
+		}
+
+		// [*]. Send File using scp
+		targetMachine := *host + ":/var/www/html/public/photo/survey/mongodb_tasklist_backup"
+		cmd = exec.Command("sshpass", "-p", *password, "scp", "-P", "43210", zipFolder, targetMachine)
+		stdout, err = cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println("[*]", err)
+			panic(1)
+		}
+		fmt.Println("[*]SCP ZIP success from 1st VM to 2nd VM: ", string(stdout))
+		textResult += fmt.Sprintf("[*]SCP ZIP success from 1st VM to 2nd VM: %s<br>\n", string(stdout))
+
+	}
+	// ====================================MONGODB================================================
+
+	// 	// // 11. Send Email
+	// 	smtpConfig := env.GetSMTPConfig()
+	// 	smtpClient := mail.InitEmail(smtpConfig)
+	// 	Email := []string{"frans.imanuel@visionet.co.id", "lishera.prihatni@visionet.co.id", "ari.darmawan@visionet.co.id", "azky.muhtarom@visionet.co.id"}
+	// 	if err := smtpClient.Send(Email, nil, nil, "MetaForce Auto Backup", "text/html", textResult, []string{"program_log.txt"}); err != nil {
+	// 		fmt.Println("11. Send Email Error: ", err)
+	// 		panic(1)
+	// 	}
+	// 	fmt.Println("11. Send Email Success")
 
 	// })
 	// c.Start()
